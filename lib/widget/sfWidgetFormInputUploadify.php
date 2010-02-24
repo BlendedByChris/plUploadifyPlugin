@@ -90,7 +90,7 @@ class sfWidgetFormInputUploadify extends sfWidgetFormInputFile
         //<![CDATA[
         $(document).ready(function() {
           $('#$widget_id').uploadify({
-            'scriptData': {'$session_name':'$session_id', '_csrf_token':$('#$widget_id').closest('form').find("input[name$='_csrf_token]']").val()},
+            'scriptData': {'$session_name':'$session_id', 'media[_csrf_token]':$('#$widget_id').closest('form').find("input[name$='_csrf_token]']").val()},
             'uploader': '$uploader',
             'cancelImg': '$cancel_img',
             'auto'      : true,
