@@ -1,7 +1,5 @@
 <?php
 
-sfApplicationConfiguration::getActive()->loadHelpers('Url');
-
 /**
  * sfWidgetFormInputUploadify class
  * 
@@ -32,22 +30,7 @@ class sfWidgetFormInputUploadify extends sfWidgetFormInputFile
     parent::configure($options, $attributes);
     
     $this->addOption('uploadify_path', '/plUploadifyPlugin/vendor/jquery-uploadify');
-  }
-
-  /**
-   * Gets the stylesheet paths associated with the widget.
-   *
-   * The array keys are files and values are the media names (separated by a ,):
-   *
-   *   array('/path/to/file.css' => 'all', '/another/file.css' => 'screen,print')
-   *
-   * @return array An array of stylesheet paths
-   */
-  public function getStylesheets()
-  {
-    return array(
-      $this->getOption('swfupload_css_path') => 'all'
-    );
+    $this->addOption('include_jquery', false);
   }
 
   /**
@@ -80,6 +63,9 @@ class sfWidgetFormInputUploadify extends sfWidgetFormInputFile
     $uploader = $this->getOption('uploadify_path') . '/uploadify.swf';
     $cancel_img = $this->getOption('uploadify_path') . '/cancel.png';
     
+    $form = new BaseForm();
+    $csrf_token = $form->getCSRFToken();
+    
     $output .= <<<EOF
       <div class="swfupload-buttontarget">
         <noscript>
@@ -90,7 +76,7 @@ class sfWidgetFormInputUploadify extends sfWidgetFormInputFile
         //<![CDATA[
         $(document).ready(function() {
           $('#$widget_id').uploadify({
-            'scriptData': {'$session_name':'$session_id', 'media[_csrf_token]':$('#$widget_id').closest('form').find("input[name$='_csrf_token]']").val()},
+            'scriptData': {'$session_name':'$session_id', '_csrf_token':'$csrf_token'},
             'uploader': '$uploader',
             'cancelImg': '$cancel_img',
             'auto'      : true,
@@ -98,6 +84,7 @@ class sfWidgetFormInputUploadify extends sfWidgetFormInputFile
             'folder': '/',
             'multi': false,
             'displayData': 'speed',
+            'fileDataName': '$widget_id',
             'simUploadLimit': 2
           });
         });
