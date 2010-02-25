@@ -1,0 +1,49 @@
+h1. plUploadifyPlugin
+
+plUploadifyPlugin plugin allows you to use the jQuery/Flash based file 
+uploader Uploadify packaged as a simple widget with minimal effort. Feel free to fork 
+and add more of the Uploadify options in the widget but this is all I use. I'll
+gladly merge your updates.
+
+h2. Installation 
+
+h3. 1. Install the plugin
+
+To install the plugin just use the following in your /plugins directory:
+
+h3. 2. Publish your assets
+
+<pre>
+<code>./symfony plugin:publish-assets
+</code>
+</pre>
+
+h3. 3. Create your upload action
+
+<pre>
+<code>  public function executeUpload(sfWebRequest $request)
+  {
+    $request->checkCSRFProtection();
+    
+    $file = $request->getFiles("form_widget");
+    
+    if (isset($file)) {
+      $uploadPath = sfConfig::get("sf_upload_dir");
+      $f = new sfValidatedFile($file["name"], 
+        $file["type"], 
+        $file["tmp_name"], 
+        $file["size"], 
+        $uploadPath);
+
+      $f->save($f->generateFilename().$f->getOriginalExtension());
+    }
+
+    $this->setLayout(false);
+    return sfView::NONE;
+  }</code>
+</pre>
+
+h2. Thanks!
+
+Thanks to Frantic on IRC and Johannes for some code I took from 
+"sfWidgetFormInputSWFUploadPlugin":http://www.symfony-project.org/plugins/sfWidgetFormInputSWFUploadPlugin
