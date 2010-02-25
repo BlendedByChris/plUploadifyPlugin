@@ -14,14 +14,28 @@ To install the plugin just use the following in your /plugins directory:
 h3. 2. Publish your assets
 
 <pre>
-<code>./symfony plugin:publish-assets
-</code>
+<code>./symfony plugin:publish-assets</code>
 </pre>
 
-h3. 3. Create your upload action
+h3. 3. Add the widget to your form
 
 <pre>
-<code>  public function executeUpload(sfWebRequest $request)
+<code>class FormForm extends BaseFormForm
+{
+  public function configure()
+  {
+    $this->useFields(array('widget'));
+
+    $this->widgetSchema['widget'] = new sfWidgetFormInputUploadify();
+    $this->validatorSchema['widget'] = new sfValidatorFile();
+  }
+}</code>
+</pre>
+
+h3. 4. Create your upload action
+
+<pre>
+<code>public function executeUpload(sfWebRequest $request)
   {
     $request->checkCSRFProtection();
     
