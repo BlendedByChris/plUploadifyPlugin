@@ -17,6 +17,23 @@ h3. 2. Publish your assets
 <code>./symfony plugin:publish-assets</code>
 </pre>
 
+h3. 2. Enable the plugin
+
+<pre>
+<code>class ProjectConfiguration extends sfProjectConfiguration
+{
+  public function setup()
+  {
+    // for compatibility / remove and enable only the plugins you want
+    $this->enableAllPluginsExcept(array('sfPropelPlugin'));
+  }
+}</code>
+</pre>
+
+<pre>
+<code>./symfony plugin:publish-assets</code>
+</pre>
+
 h3. 3. Add the widget to your form
 
 <pre>
